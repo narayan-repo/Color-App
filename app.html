@@ -14,7 +14,7 @@
     <title>Document</title>
   </head>
 
-  <body style="background-color: black">
+  <body style="background-color: #232323">
     <section class="heading header pb-2">
       <div class="container text-center">
         <h1 class="display-6">
@@ -27,11 +27,11 @@
 
     <section class="gameInfo">
       <div class="container d-flex justify-content-around align-items-center">
-        <a href="">New Colors</a>
+        <button id="reset" class="reset py-2">New Colors</button>
         <span id="winOrlose"></span>
-        <div class="difficulty">
-          <a class="px-2 pt-1 m-0" href="">Easy</a>
-          <a class="px-2 pt-1 m-0" href="">Hard</a>
+        <div class="difficulty d-flex justify-content-between">
+          <button id="easy" class="gameDifficulty py-2 mx-0">Easy</button>
+          <button id="hard" class="gameDifficulty py-2 mx-0">Hard</button>
         </div>
       </div>
     </section>

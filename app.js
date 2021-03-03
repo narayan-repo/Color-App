@@ -1,118 +1,122 @@
 var header = document.querySelector(".header");
+var winOrlose = document.querySelector('#winOrlose');
 var rgbValue = document.querySelector("#rgbValue");
 
-var color1 = document.querySelector("#color-1")
-var color2 = document.querySelector("#color-2")
-var color3 = document.querySelector("#color-3")
-var color4 = document.querySelector("#color-4")
-var color5 = document.querySelector("#color-5")
-var color6 = document.querySelector("#color-6")
+var colors = document.querySelectorAll(".color");
+var colorValues = [];
+var index;
+var rightColor;
 
-var color1Value = randomRGB();
-var color2Value = randomRGB();
-var color3Value = randomRGB();
-var color4Value = randomRGB();
-var color5Value = randomRGB();
-var color6Value = randomRGB();
+//buttons
+var newColors = document.querySelector(".reset"); //New Colors
+var easy = document.querySelector("#easy");       //Easy
+var hard = document.querySelector("#hard");       //Hard
 
-var winOrlose = document.querySelector('#winOrlose');
+//for initial blue background of hard button on page load
+hard.classList.add("selected");
 
-var arr = [color1Value, color2Value, color3Value, color4Value, color5Value, color6Value];
+//function to assign colors to the divs
+function assignColorsToDivs() {
+    for (let i = 0; i < colors.length; i++) {
+        //give each div a random background color
+        colorValues.push(randomRGB());
+        colors[i].style.background = colorValues[i];
+    }
+}
 
-var indexGuessColor = Math.floor(Math.random() * arr.length);
+newColors.addEventListener('click', function () {
+    colorValues = [];
+    assignColorsToDivs();
+    pickRightColor(); //choose a new right color
+    //reverting back to default styling
+    newColors.textContent = "New Colors"
+    rgbValue.innerHTML = rightColor.toUpperCase();
+    header.style.background = "blue";
+    winOrlose.textContent = "";
 
+});
+
+easy.addEventListener('click', function () {
+    colorValues = [] //starting from a empty color pallete
+    newColors.click();
+    easy.classList.add("selected");
+    hard.classList.remove("selected");
+
+    for (let i = 0; i < colors.length; i++) {
+        if (i < 3) {
+            colorValues.push(randomRGB());
+            colors[i].style.background = colorValues[i];
+        } else {
+            colors[i].style.display = "none"; //hiding bottom three color divs
+        }
+    }
+    pickRightColor(); //chosing new right color from only the top three divs
+    rgbValue.innerHTML = rightColor.toUpperCase();
+
+})
+
+hard.addEventListener('click', function () {
+
+    newColors.click();
+
+    hard.classList.add("selected");
+    easy.classList.remove("selected");
+    for (let i = 3; i < colors.length; i++) {
+        colors[i].style.display = "inline";
+    }
+})
+
+//function to generate a random rgb value in string format
 function randomRGB() {
     var red = Math.floor(Math.random() * 255 + 1);
     var green = Math.floor(Math.random() * 255 + 1);
     var blue = Math.floor(Math.random() * 255 + 1);
 
-    return "RGB(".concat(red, ", ", green, ", ", blue, ")")
+    return "rgb(".concat(red, ", ", green, ", ", blue, ")")
 }
 
 
-//right color
-var guessColor = arr[indexGuessColor];
-rgbValue.innerHTML = guessColor;
-// header.style.background = guessColor;
+function pickRightColor() {
+    let isEasy = false; //if mode = easy then isEasy = true
+    for (let i = 0; i < colors.length; i++) {
+        if (colors[i].style.display == "none") {
+            isEasy = true;
+            break;
+        }
+    }
+    if (!isEasy) {
+        index = Math.floor(Math.random() * colors.length);
+    } else {
+        index = Math.floor(Math.random() * 3);
+    }
+    rightColor = colorValues[index];
 
-//colore pallete
-color1.style.background = color1Value;
-color2.style.background = color2Value;
-color3.style.background = color3Value;
-color4.style.background = color4Value;
-color5.style.background = color5Value;
-color6.style.background = color6Value;
-
-function winEvent(colorValue) {
-    color1.style.background = colorValue;
-    color2.style.background = colorValue;
-    color3.style.background = colorValue;
-    color4.style.background = colorValue;
-    color5.style.background = colorValue;
-    color6.style.background = colorValue;
-    header.style.background = colorValue;
-    winOrlose.innerHTML = "You Win";
 }
 
-function loseEvent(color) {
-    color.style.background = "none";
-    winOrlose.innerHTML = "Try Again";
-}
+assignColorsToDivs(); //apply initial colors to divs on page load
+pickRightColor();     //choose initial right color on page load  
+rgbValue.innerHTML = rightColor.toUpperCase();
 
+//adding event listeners to each div
+for (let i = 0; i < colors.length; i++) {
+    //add event listeners to each div
+    colors[i].addEventListener('click', function () {
+        if (this.style.background === rightColor) {
+            changeAllColors(rightColor);
+            winOrlose.textContent = "Correct!"
+            newColors.textContent = "Play Again"
+        } else {
+            this.style.background = "#232323"
+            winOrlose.textContent = "Try Again"
+        }
+    });
+};
 
-color1.addEventListener('click', function () {
-    if (color1.style.background == guessColor.toLowerCase()) {
-        console.log("color1");
-        winEvent(color1.style.background);
+//function to change the colors of all the divs and the header to the rightColor
+function changeAllColors(color) {
+    for (let i = 0; i < colors.length; i++) {
+        colors[i].style.background = color;
     }
-    else {
-        loseEvent(color1);
-    }
-});
-color2.addEventListener('click', function () {
-    if (color2.style.background == guessColor.toLowerCase()) {
-        console.log("color2")
-        winEvent(color2.style.background);
+    header.style.background = color;
+};
 
-    }
-    else {
-        loseEvent(color2);
-    }
-});
-color3.addEventListener('click', function () {
-    if (color3.style.background == guessColor.toLowerCase()) {
-        console.log("color3")
-        winEvent(color3.style.background);
-    }
-    else {
-        loseEvent(color3);
-    }
-});
-color4.addEventListener('click', function () {
-    if (color4.style.background == guessColor.toLowerCase()) {
-        console.log("color4")
-        winEvent(color4.style.background);
-
-    }
-    else {
-        loseEvent(color4);
-    }
-});
-color5.addEventListener('click', function () {
-    if (color5.style.background == guessColor.toLowerCase()) {
-        console.log("color5")
-        winEvent(color5.style.background);
-    }
-    else {
-        loseEvent(color5);
-    }
-});
-color6.addEventListener('click', function () {
-    if (color6.style.background == guessColor.toLowerCase()) {
-        console.log("color6")
-        winEvent(color6.style.background);
-    }
-    else {
-        loseEvent(color6);
-    }
-});

@@ -2,6 +2,7 @@
   background-color: blue;
   color: white;
   max-height: 30vh;
+  transition: background-color 0.5s ease-out;
 }
 
 .gameInfo {
@@ -23,6 +24,31 @@
 }
 
 .color {
-  border: 1px solid black;
   border-radius: 45px;
+  transition: background-color 0.5s ease-out;
+}
+
+#reset,
+.gameDifficulty {
+  font-family: "Franklin Gothic Medium";
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: white;
+  color: blue;
+  border: none;
+}
+#reset:hover {
+  background: blue;
+  color: white;
+}
+
+.selected {
+  background: blue;
+  color: white;
+}
+
+#winOrlose {
+  display: inline-block;
+  width: 20%;
+  text-align: center;
 }
